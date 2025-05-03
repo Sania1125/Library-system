@@ -1,3 +1,4 @@
+
 import hashlib
 
 # Person class as the base for User and Admin
@@ -8,10 +9,8 @@ class Person:
         self.role = role
 
     def check_password(self, password):
-        # Check if the entered password matches the stored hash
         return self.password == hashlib.sha256(password.encode()).hexdigest()
 
-# User class extends Person
 class User(Person):
     def __init__(self, username, password):
         super().__init__(username, password, role="user")
@@ -42,7 +41,6 @@ class User(Person):
         for book in self.borrowed_books:
             print(book)
 
-# Admin class extends Person
 class Admin(Person):
     def __init__(self, username, password):
         super().__init__(username, password, role="admin")
@@ -71,7 +69,6 @@ class Admin(Person):
         for user in library.users.values():
             print(f"{user.username} - Role: {user.role}")
 
-# Book class
 class Book:
     def __init__(self, title, author, isbn, accession_number):
         self.title = title
@@ -96,7 +93,6 @@ class Book:
         status = "Borrowed" if self.is_borrowed else "Available"
         return f"{self.title} by {self.author} [{status}]"
 
-# Library class
 class Library:
     def __init__(self):
         self.books = []
@@ -130,35 +126,27 @@ class Library:
         print("Invalid username or password.")
         return None
 
-# Main execution
 def main():
-    # Initialize the library system
     library = Library()
-
-    # Register users and admins
     library.register_user("admin", "adminpass", role="admin")
     library.register_user("user1", "userpass", role="user")
     library.register_user("user2", "user2pass", role="user")
 
-    # Add books to the library
     library.add_book(Book("Python Crash Course", "Eric Matthes", "123", "A001"))
     library.add_book(Book("Automate the Boring Stuff", "Al Sweigart", "124", "A002"))
     library.add_book(Book("Learning JavaScript", "John Doe", "125", "A003"))
 
-    # Login process
     logged_in_user = None
     while not logged_in_user:
         username = input("Enter username: ")
         password = input("Enter password: ")
         logged_in_user = library.login(username, password)
 
-    # Admin or user menu based on the role
     if isinstance(logged_in_user, Admin):
         print("\nWelcome, Admin. You can manage books and users.")
     else:
         print("\nWelcome, User. You can borrow and return books.")
 
-    # Main menu loop
     while True:
         if isinstance(logged_in_user, Admin):
             print("\n1. View All Books\n2. Add Book\n3. Remove Book\n4. View All Users\n5. Exit")
@@ -182,10 +170,10 @@ def main():
                 logged_in_user.view_all_users(library)
 
             elif choice == "5":
-                print("Goodbye!")
+                print("📚 Thank you for using the digital library. Have a great day!")
                 break
 
-        else:  # User menu
+        else:
             print("\n1. View Books\n2. Borrow Book\n3. Return Book\n4. My Borrowed Books\n5. Exit")
             choice = input("Choose an option: ")
 
@@ -219,7 +207,7 @@ def main():
                 logged_in_user.view_borrowed_books()
 
             elif choice == "5":
-                print("Goodbye!")
+                print("📚 Thank you for using the digital library. Have a great day!")
                 break
 
             else:
@@ -227,5 +215,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-    
